@@ -57,16 +57,15 @@ router.post("/login", async (req, res) => {
 
 router.get("/validate", async (req, res) => {
   const token = req.headers["authorization"];
-
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
   try {
     const tokenData = token.split(" ")[1];
     const user = jwt.verify(tokenData, process.env.JWT_SECRET);
     return res.status(200).json({ ...user });
   } catch (error) {
+    console.error("Token verification error:", error);
     return res.status(403).json({ message: "Invalid token" });
   }
 });
